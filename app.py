@@ -44,14 +44,13 @@ def hello_world():
 @app.route('/stink_sightings')
 def stinky():
     template = "main.html"
-    # episodes = StinkAppearances.object
+    episodes = StinkAppearances.objects
     if 'stink_level' in request.args:
         if request.args['stink_level'] == 'all':
-            return render_template(template, episodes=StinkAppearances.objects(isStinky=True).order_by('-ep_number'))
+            episodes = StinkAppearances.objects(isStinky=True).order_by('-ep_number')
         elif request.args['stink_level'] == 'none':
-            return render_template(template, episodes=StinkAppearances.objects(isStinky=False).order_by('-ep_number'))
-    else:
-        return render_template(template, episodes=StinkAppearances.objects.order_by('-ep_number'))
+            episodes = StinkAppearances.objects(isStinky=False).order_by('-ep_number')
+    return render_template(template, episodes=episodes)
 
 
 # @app.route('/stink_sightings/all_stink')
