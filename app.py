@@ -46,5 +46,15 @@ def stinky():
     return render_template("main.html", episodes=StinkAppearances.objects.order_by('-ep_number'))
 
 
+@app.route('/stink_sightings/all_stink')
+def all_stinky():
+    return render_template("main.html", episodes=StinkAppearances.objects(isStinky=True).order_by('-ep_number'))
+
+
+@app.route('/stink_sightings/no_stink')
+def no_stinky():
+    return render_template("main.html", episodes=StinkAppearances.objects(isStinky=False).order_by('-ep_number'))
+
+
 if __name__ == "__main__":
     app.run()
