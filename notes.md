@@ -1,0 +1,3 @@
+- Requires the use of MongoDB
+- Seeder is set in app.py to populate the DB with testing entries if it's blank
+- Shouldn't need to change DB settings in *app.py*.

@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, url_for
 from flask_mongoengine import MongoEngine
 from datetime import datetime
 from models import StinkAppearances
@@ -37,12 +37,13 @@ if not StinkAppearances.objects():
 
 @app.route('/')
 def hello_world():
-    return "Hello world"
+    message = "Hello world!  Were you looking for <a href={}>a stinky list</a>?".format(url_for('stinky'))
+    return message
 
 
 @app.route('/stink_sightings')
 def stinky():
-    return render_template("main.html", episodes=StinkAppearances.objects)
+    return render_template("main.html", episodes=StinkAppearances.objects.order_by('-ep_number'))
 
 
 if __name__ == "__main__":
