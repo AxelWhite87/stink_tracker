@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for
+from flask import Flask, render_template, url_for, request
 from flask_mongoengine import MongoEngine
 from datetime import datetime
 from models import StinkAppearances
@@ -43,17 +43,23 @@ def hello_world():
 
 @app.route('/stink_sightings')
 def stinky():
-    return render_template("main.html", episodes=StinkAppearances.objects.order_by('-ep_number'))
+    template = "main.html"
+    # episodes = StinkAppearances.object
+    if 'stink_level' in request.args:
+        if request.args['stink_level'] == 'all':
+            return render_template(template, episodes=StinkAppearances.objects(isStinky=True).order_by('-ep_number'))
+        elif request.args['stink_level'] == 'none':
+            return render_template(template, episodes=StinkAppearances.objects(isStinky=False).order_by('-ep_number'))
+    else:
+        return render_template(template, episodes=StinkAppearances.objects.order_by('-ep_number'))
 
 
-@app.route('/stink_sightings/all_stink')
-def all_stinky():
-    return render_template("main.html", episodes=StinkAppearances.objects(isStinky=True).order_by('-ep_number'))
-
-
-@app.route('/stink_sightings/no_stink')
-def no_stinky():
-    return render_template("main.html", episodes=StinkAppearances.objects(isStinky=False).order_by('-ep_number'))
+# @app.route('/stink_sightings/all_stink')
+# def all_stinky():
+#
+#
+# @app.route('/stink_sightings/no_stink')
+# def no_stinky():
 
 
 if __name__ == "__main__":
